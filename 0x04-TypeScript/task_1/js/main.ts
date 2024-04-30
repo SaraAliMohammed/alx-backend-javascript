@@ -15,9 +15,37 @@ export interface Directors extends Teacher {
 
 // Task 3
 export function printTeacher(firstName:string, lastName:string): string {
-    return `${firstName[0]}. ${lastName}`
+  return `${firstName[0]}. ${lastName}`
 }
 
 interface PrintTeacherFunction {
-    (firstName: string, lastName: string): string;
+  (firstName: string, lastName: string): string;
+}
+
+// Task 4
+export interface StudentClassConstructor {
+  new (firstName: string, lastName: string): StudentClassMethod;
+}
+
+export interface StudentClassMethod {
+  workOnHomework(): string;
+  displayName(): string;
+}
+
+export class StudentClass implements StudentClassMethod {
+  private _firstName!: string;
+  private _lastName!: string;
+
+  constructor(firstName: string, lastName: string) {
+    this._firstName = firstName;
+    this._lastName = lastName;
+  }
+
+  workOnHomework() {
+    return 'Currently working';
+  }
+
+  displayName() {
+    return this._firstName;
+  }
 }
