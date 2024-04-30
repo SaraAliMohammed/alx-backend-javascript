@@ -12,3 +12,12 @@ export interface Teacher {
 export interface Directors extends Teacher {
   numberOfReports: number;
 }
+
+// Task 3
+export function printTeacher(firstName:string, lastName:string): string {
+    return `${firstName[0]}. ${lastName}`
+}
+
+interface PrintTeacherFunction {
+    (firstName: string, lastName: string): string;
+}
