@@ -1,5 +1,4 @@
-//Task 1
-
+// Task 1
 export interface Teacher {
   readonly firstName: string;
   readonly lastName: string;
@@ -7,4 +6,9 @@ export interface Teacher {
   yearsOfExperience?: number;
   location: string;
   [index: string]: any;
+}
+
+// Task 2
+export interface Directors extends Teacher {
+  numberOfReports: number;
 }
