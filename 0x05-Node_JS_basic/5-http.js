@@ -10,16 +10,16 @@ function countStudents(path, stream) {
       results.push(data.split(','));
     });
     results.shift();
-    const new_data = [];
-    results.forEach((data) => new_data.push([data[0], data[3]]));
+    const newData = [];
+    results.forEach((data) => newData.push([data[0], data[3]]));
     const fields = new Set();
-    new_data.forEach((item) => fields.add(item[1]));
-    const final_data = {};
-    fields.forEach((data) => { (final_data[data] = 0); });
-    new_data.forEach((data) => { (final_data[data[1]] += 1); });
+    newData.forEach((item) => fields.add(item[1]));
+    const finalData = {};
+    fields.forEach((data) => { (finalData[data] = 0); });
+    newData.forEach((data) => { (finalData[data[1]] += 1); });
     stream.write(`Number of students: ${results.length}\n`);
     const temp = [];
-    Object.keys(final_data).forEach((data) => temp.push(`Number of students in ${data}: ${final_data[data]}. List: ${new_data.filter((n) => n[1] === data).map((n) => n[0]).join(', ')}\n`));
+    Object.keys(finalData).forEach((data) => temp.push(`Number of students in ${data}: ${finalData[data]}. List: ${newData.filter((n) => n[1] === data).map((n) => n[0]).join(', ')}\n`));
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < temp.length; i++) {
       if (i === temp.length - 1) {
