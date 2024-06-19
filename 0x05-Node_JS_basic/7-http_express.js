@@ -11,29 +11,35 @@ app.get('/', (req, res) => {
 
 app.get('/students', (req, res) => {
   res.set('Content-Type', 'text/plain');
-  res.write('This is the list of our students\n');
+
   fs.readFile(argv[2], 'utf8', (err, data) => {
     if (err) {
-      throw Error('Cannot load the database');
+      res.status(500).send('Cannot load the database');
+      return;
     }
-    const results = [];
-    data.trim().split('\n').forEach((data) => {
-      results.push(data.split(','));
-    });
-    results.shift();
-    const newData = [];
-    results.forEach((data) => newData.push([data[0], data[3]]));
-    const fields = new Set();
-    newData.forEach((item) => fields.add(item[1]));
+
+    const results = data.trim().split('\n').map((line) => line.split(','));
+    results.shift(); // Remove the header row
+
+    const newData = results.map((row) => [row[0], row[3]]);
+    const fields = new Set(newData.map((item) => item[1]));
+
     const finalData = {};
-    fields.forEach((data) => { (finalData[data] = 0); });
-    newData.forEach((data) => { (finalData[data[1]] += 1); });
-    res.write(`Number of students: ${results.filter((check) => check.length > 3).length}\n`);
-    Object.keys(finalData).forEach((data) => res.write(`Number of students in ${data}: ${finalData[data]}. List: ${newData.filter((n) => n[1] === data).map((n) => n[0]).join(', ')}\n`));
-    res.end();
+    fields.forEach((field) => { finalData[field] = 0; });
+    newData.forEach((item) => { finalData[item[1]] += 1; });
+
+    let responseText = 'This is the list of our students\n';
+    responseText += `Number of students: ${results.filter((row) => row.length > 3).length}\n`;
+    Object.keys(finalData).forEach((field) => {
+      responseText += `Number of students in ${field}: ${finalData[field]}. List: ${newData.filter((item) => item[1] === field).map((item) => item[0]).join(', ')}\n`;
+    });
+
+    res.send(responseText.trimEnd()); // Trim the trailing new line
   });
 });
 
-app.listen(1245);
+app.listen(1245, () => {
+  console.log('Server is running on port 1245');
+});
 
 module.exports = app;
